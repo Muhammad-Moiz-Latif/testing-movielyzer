@@ -1,31 +1,24 @@
-# Use official Python image
 FROM python:3.11-slim
 
-# Install dependencies for Chrome
+# Install Chrome and dependencies
 RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    xvfb \
-    libnss3 \
-    libgconf-2-4 \
-    default-jdk \
-    chromium \
-    chromium-driver \
+    wget unzip xvfb libnss3 libgconf-2-4 libxss1 libappindicator1 \
+    fonts-liberation libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Chrome path for Selenium
-ENV CHROME_BIN=/usr/bin/chromium
-ENV CHROME_DRIVER=/usr/bin/chromedriver
+# Install Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && dpkg -i google-chrome-stable_current_amd64.deb || apt-get -fy install \
+    && rm google-chrome-stable_current_amd64.deb
 
-# Set working directory
-WORKDIR /app
-
-# Copy project files
-COPY . /app
-
-# Install Python dependencies
+# Install ChromeDriver autoinstaller
 RUN pip install --upgrade pip
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Run tests in headless mode
-CMD ["python", "-m", "pytest", "--headless"]
+# Copy test code
+COPY selenium-tests/ /selenium-tests/
+
+WORKDIR /selenium-tests
+
+CMD ["pytest", "--headless", "--disable-warnings"]

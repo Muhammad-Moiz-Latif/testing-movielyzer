@@ -1,41 +1,26 @@
 pipeline {
     agent any
-
-    environment {
-        DOCKER_IMAGE = 'selenium-tests:latest'
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/yourusername/your-repo.git'
+                git url: 'https://github.com/Muhammad-Moiz-Latif/testing-movielyzer.git', branch: 'main'
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t $DOCKER_IMAGE .'
-                }
-            }
-        }
-
         stage('Run Selenium Tests') {
             steps {
                 script {
-                    sh 'docker run --rm $DOCKER_IMAGE'
+                    // Run tests in Docker container
+                    sh 'docker build -t selenium-tests .'
+                    sh 'docker run --rm selenium-tests'
                 }
             }
         }
     }
-
     post {
         always {
-            echo 'Sending test report via email...'
-            // Example: Use Jenkins Email Extension Plugin
-            // mail to: 'your_email@example.com',
-            //      subject: "Selenium Test Results",
-            //      body: "Please find attached the test results."
+            mail to: 'moizlatif4137@gmail.com',
+                 subject: "Selenium Test Results",
+                 body: "Check Jenkins console for results."
         }
     }
 }
