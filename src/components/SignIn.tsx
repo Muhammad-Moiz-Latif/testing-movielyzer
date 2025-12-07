@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import bg from '../assets/Hexagon.svg';
 import visible from '../assets/visible.png';
@@ -135,6 +135,10 @@ export default function SignIn() {
     const [isHidden1, setIsHidden1] = useState(true);
     const navigate = useNavigate();
 
+    const handleNavLinkClick = (path: string) => {
+        navigate(path);
+    };
+
     return (
         <motion.div
             initial="hidden"
@@ -143,14 +147,14 @@ export default function SignIn() {
             className="max-w-full min-h-screen relative font-inter text-white overflow-hidden"
         >
             <img src={bg || "/placeholder.svg"} className='w-full h-full object-cover absolute inset-0' alt="background" style={{
-                    WebkitMaskImage:
-                        'radial-gradient(circle at top left, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%),' +
-                        'radial-gradient(circle at top right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%),' +
-                        'radial-gradient(circle at bottom left, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%),' +
-                        'radial-gradient(circle at bottom right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%)',
-                    WebkitMaskComposite: 'destination-in',
-                    maskComposite: 'intersect',
-                }} />
+                WebkitMaskImage:
+                    'radial-gradient(circle at top left, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%),' +
+                    'radial-gradient(circle at top right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%),' +
+                    'radial-gradient(circle at bottom left, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%),' +
+                    'radial-gradient(circle at bottom right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%)',
+                WebkitMaskComposite: 'destination-in',
+                maskComposite: 'intersect',
+            }} />
 
             <AnimatePresence mode="wait">
                 <motion.form
@@ -238,7 +242,7 @@ export default function SignIn() {
                                     <span className='text-base text-white'>Continue with Google</span>
                                 </div>
                             </motion.button>
-                            <motion.h1 variants={itemVariant} className='text-sm text-center mt-4'>Already have an account? <button onClick={() => { navigate('/LogIn') }} className='text-[#D4F92F] hover:cursor-pointer'>Log in</button></motion.h1>
+                            <motion.h1 variants={itemVariant} className='text-sm text-center mt-4'>Already have an account? <button onClick={() => handleNavLinkClick('/LogIn')} className='text-[#D4F92F] hover:cursor-pointer'>Log in</button></motion.h1>
                         </motion.div>
 
                     </AnimatePresence>
