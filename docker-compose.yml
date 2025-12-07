@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  selenium-tests:
+    build: .
+    container_name: selenium_tests
+    volumes:
+      - .:/app
+    environment:
+      - DISPLAY=:99
+    tty: true
