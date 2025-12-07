@@ -1,0 +1,31 @@
+# Use official Python image
+FROM python:3.11-slim
+
+# Install dependencies for Chrome
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    xvfb \
+    libnss3 \
+    libgconf-2-4 \
+    default-jdk \
+    chromium \
+    chromium-driver \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Chrome path for Selenium
+ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROME_DRIVER=/usr/bin/chromedriver
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files
+COPY . /app
+
+# Install Python dependencies
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Run tests in headless mode
+CMD ["python", "-m", "pytest", "--headless"]
